@@ -13,12 +13,48 @@ symbol = {
     '*': 89, '0': 90, '1': 91, '2': 92, '3': 93, '4': 94, '5': 95, '6': 96,
     '7': 97, '8': 98, '9': 99, '=': 100
 }
-b = []
-a = input()
-a = a.lower()
-for i in a:
-    if i in symbol:
-        b.append(symbol[i])
+def sypher(text):
+    result = []
+    for i in text:
+        if i in symbol:
+            index = symbol[i]
+            new_index = 100 - index
+            result.append(str(new_index))
+        else:
+            result.append(i)
+    return " ".join(result)
+
+def obrat_cypher(encrypted_text):
+    reverse_symbol = {value: key for key, value in symbol.items()}
+    result = []
+    items = encrypted_text.split()
+    for item in items:
+        if item.isdigit() or (item.startswith('-') and item[1:].isdigit()):
+            num = int(item)
+            original_index = 100 - num
+            if original_index in reverse_symbol:
+                result.append(reverse_symbol[original_index])
+            else:
+                result.append(item)
+        else:
+            result.append(item)
+    return "".join(result)
+
+
+# Главное меню программы
+print("Меню")
+print("1) Зашифровать")
+print("2) Расшифровать")
+
+try:
+    inp = int(input("Выберите действие (1 или 2): "))
+    if inp == 1:
+        a = input("Введите текст для зашифровки: ").lower()
+        print("Результат шифрования:", sypher(a))
+    elif inp == 2:
+        a = input("Введите числа через пробел для расшифровки: ")
+        print("Результат расшифрования:", obrat_cypher(a))
     else:
-        b.append(i)
-print(*b)
+        print("Неверный пункт меню.")
+except ValueError:
+    print("Ошибка ввода. Пожалуйста, вводите корректные данные.")
